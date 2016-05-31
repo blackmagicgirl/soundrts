@@ -485,5 +485,7 @@
 4338 massive wall
 4339 massive gate
 
-4340 no free meadows
-4341 no unblocked exits
+4340	Start a public game on
+
+4341 no free meadows
+4342 no unblocked exits
