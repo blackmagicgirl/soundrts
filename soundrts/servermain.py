@@ -136,14 +136,22 @@ class Server(asyncore.dispatcher):
     ip = ""
 
     def _get_ip_address(self):
-        try:
-            self.ip = urllib.urlopen(WHATISMYIP_URL).read().strip()
-            if not re.match("^[0-9.]{7,40}$", self.ip):
-                self.ip = ""
-        except:
-            self.ip = ""
-        if not self.ip:
-            warning("could not get my IP address from %s", WHATISMYIP_URL)
+        ip=""
+        for p in self.parameters:
+            if p.lower().startswith("ip="):
+                ip=p.split('=')[1]
+        if not ip:
+            try:
+                ip = urllib.urlopen(WHATISMYIP_URL).read().strip()
+            except:
+                ip = ""
+            if not ip:
+                warning("could not get my IP address from %s", WHATISMYIP_URL)
+        if not re.match("^[0-9.]{7,40}$", ip):
+            warning("Incorrectly formatted ip: %s", ip)
+            ip=""
+        self.ip=ip
+        info("Using ip: %s", ip)
 
     _first_registration = True
 
