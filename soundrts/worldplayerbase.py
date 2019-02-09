@@ -692,7 +692,7 @@ class Player(object):
                     elif target:
                         x, y = target.x, target.y 
                         sq = target if target in self.world.squares else target.place
-                        if cls.cls is Building:
+                        if cls.cls is Building_site:
                             build_on_exits_only=bool(getattr(cls, 'is_buildable_on_exits_only', False))
                             if getattr(cls, 'is_buildable_anywhere', False): pass
                             elif getattr(target, 'is_a_building_land', False):
@@ -708,11 +708,11 @@ class Player(object):
                                 x, y = land.x, land.y
                     else:
                         x, y, land = sq.find_and_remove_meadow(cls)
-                        if land is None and cls.cls is Building: break
+                        if land is None and cls.cls is Building_site: break
                     try:
                         u = cls(self, sq, x, y)
                         u.building_land = land
-                        if isinstance(u, Building):
+                        if isinstance(u, Building_site):
                             if getattr(land, 'is_an_exit', False): u.block(land)
                             elif not getattr(u, 'is_buildable_anywhere', False) and isinstance(land, Meadow): land.delete()
                             if target: target=u
