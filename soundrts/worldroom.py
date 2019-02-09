@@ -231,7 +231,7 @@ class Square(object):
             return Path[1], D[dest]
 
     def find_nearest_meadow(self, unit, find_exits_instead=False):
-        if find_exits_instead: land_type = Exit
+        if find_exits_instead: land_type = passage
         else: land_type = Meadow
         def _d(o):
             # o.id to make sure that the result is the same on any computer
@@ -246,11 +246,11 @@ class Square(object):
     def find_and_remove_meadow(self, item_type):
         if item_type.is_buildable_anywhere:
             return self.x, self.y, None
-        if item_type.is_buildable_on_exits_only: land_type = Exit
+        if item_type.is_buildable_on_exits_only: land_type = passage
         else: land_type = Meadow
         for o in self.objects:
             if isinstance(o, land_type):
-                if land_type is Exit and o.is_blocked(): continue
+                if land_type is passage and o.is_blocked(): continue
                 x, y = o.x, o.y
                 if isinstance(o, Meadow): o.delete()
                 return x, y, o
