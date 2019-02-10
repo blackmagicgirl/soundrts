@@ -692,7 +692,7 @@ class Player(object):
                     elif target:
                         x, y = target.x, target.y 
                         sq = target if target in self.world.squares else target.place
-                        if cls.cls is Building_site:
+                        if cls.cls is BuildingSite:
                             build_on_exits_only=bool(getattr(cls, 'is_buildable_on_exits_only', False))
                             if getattr(cls, 'is_buildable_anywhere', False): pass
                             elif getattr(target, 'is_a_building_land', False):
@@ -708,11 +708,11 @@ class Player(object):
                                 x, y = land.x, land.y
                     else:
                         x, y, land = sq.find_and_remove_meadow(cls)
-                        if land is None and cls.cls is Building_site: break
+                        if land is None and cls.cls is BuildingSite: break
                     try:
                         u = cls(self, sq, x, y)
                         u.building_land = land
-                        if isinstance(u, Building_site):
+                        if isinstance(u, BuildingSite):
                             if getattr(land, 'is_an_exit', False): u.block(land)
                             elif not getattr(u, 'is_buildable_anywhere', False) and isinstance(land, Meadow): land.delete()
                             if target: target=u
@@ -912,12 +912,12 @@ class Player(object):
             return False
         return True
 
-    def nearest_warehouse(self, place, resource_type, include_building_sites=False):
+    def nearest_warehouse(self, place, resource_type, include_BuildingSites=False):
         warehouses = []
         for p in self.allied:
             for u in p.units:
                 if (resource_type in u.storable_resource_types
-                    or include_building_sites
+                    or include_BuildingSites
                        and isinstance(u, BuildingSite)
                        and resource_type in u.type.storable_resource_types):
                     d = place.shortest_path_distance_to(u.place, self)
